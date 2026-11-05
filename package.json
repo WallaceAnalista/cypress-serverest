@@ -1,0 +1,19 @@
+{
+  "name": "cypress-serverest",
+  "version": "1.0.0",
+  "description": "Testes E2E (front) e de API do ServeRest com Cypress, comandos customizados, cy.session e relatório Mochawesome",
+  "private": true,
+  "scripts": {
+    "cy:open": "cypress open",
+    "test": "cypress run",
+    "test:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.js'",
+    "test:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.js'"
+  },
+  "keywords": ["cypress", "e2e", "api-testing", "qa", "serverest"],
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "cypress": "^14.5.0",
+    "cypress-mochawesome-reporter": "^3.8.2"
+  }
+}

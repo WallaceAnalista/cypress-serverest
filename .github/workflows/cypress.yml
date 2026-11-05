@@ -1,0 +1,48 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 10 * * 1' # toda segunda às 07h (horário de Brasília)
+
+jobs:
+  cypress:
+    name: Cypress (${{ matrix.suite }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ui, api]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Rodar testes (${{ matrix.suite }})
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          browser: chrome
+          spec: cypress/e2e/${{ matrix.suite }}/**/*.cy.js
+
+      - name: Publicar relatório Mochawesome
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-cypress-${{ matrix.suite }}
+          path: |
+            cypress/reports/
+            cypress/screenshots/
+          retention-days: 14
+          if-no-files-found: ignore
